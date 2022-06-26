@@ -84,7 +84,7 @@ ${录制目标文件夹}
 
 
 *使用请注明脚本来自 [@熊卡录播 bot](https://space.bilibili.com/1576916333)*
-   
+
 ### 配置文件 `recorder_config.yaml` 例子 
 
 [简单录播账号](https://github.com/valkjsaaa/auto-bilibili-recorder/blob/master/example_dir/recorder_config.uploader.yaml)
@@ -100,3 +100,27 @@ ${录制目标文件夹}
 
 如果不需要显卡加速转码，应该只要是 x64 环境就可以。我的 docker 版本是 `Docker version 20.10.3, build 48d30b5` 。
 显卡加速要求比较苛刻，我自己使用的录播机用的 Ubuntu 18.04.5 LTS 、GTX 980 Ti 和 Driver Version: 450.102.04 。
+
+
+#### win10/11
+
+- 下载、安装 [docker](https://docs.docker.com/desktop/windows/install/) 
+
+  - 按照安装界面的教程安装 WSL 2 补丁并重启
+
+  - 按照[这篇教程](https://blog.csdn.net/nyasm/article/details/121569182)，勾选 `Use Docker Compose V2` 并重启 docker
+
+  - > 如果遇到代理导致 WSL 2 启动出现问题，请参考[这](https://github.com/microsoft/WSL/issues/4177#issuecomment-599035900)
+    >
+    > 可以使用 issues 中的小软件尝试解决问题
+
+- 创建一个工程目录以及配置文件
+
+```
+docker run -d --restart=always --gpus all -e NVIDIA_DRIVER_CAPABILITIES=video,compute,utility --name auto-bilibili-recorder \
+-v 工程目录绝对路径:/storage ghcr.io/valkjsaaa/auto-bilibili-recorder-gpu:master
+```
+
+- 等待拉取镜像，确保网络能够正常访问 docker hub
+- 工程目录的绝对路径可以通过 **右键文件夹** - **复制文件路径** 得到，但是你要去掉开头和结尾的引号以及把所有的 `\` 替换为 `/`
+- 进入工程文件夹内可查看 logs 文件
